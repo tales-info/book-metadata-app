@@ -3,11 +3,24 @@
   <h4>Buscar metadados através do ISBN</h4>
   <div class="row">
     <div class="col-md-3">
-      <div class="form-group">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a :class="`nav-link${!upload ? ' active' : ''}`" href="#" @click.prevent="upload = false">Manual</a>
+        </li>
+        <li class="nav-item">
+          <a :class="`nav-link${upload ? ' active' : ''}`" href="#" @click.prevent="upload = true">Upload</a>
+        </li>
+      </ul>
+      <div class="form-group" v-if="!upload">
         <small id="isbnHelp" class="form-text text-muted">Um ISBN por linha</small>
         <textarea class="form-control" id="isbnList" v-model="isbnList" rows="10" aria-describedby="isbnHelp"></textarea>
-        <button class="btn btn-primary btn-block mt-2" @click="() => getData(format)">Obter Metadados</button>
       </div>
+      <div class="custom-file mt-3" v-else>
+        <input type="file" class="custom-file-input" id="customFile" aria-describedby="isbnFileHelp" ref="upload">
+        <label class="custom-file-label" for="customFile">Choose file</label>
+        <small id="isbnFileHelp" class="form-text text-muted">Upload de arquivo txt contendo ISBNs (um por linha)</small>
+      </div>
+      <button class="btn btn-primary btn-block mt-2" @click="() => getData(format)">Obter Metadados</button>
     </div>
     <div class="col">
       <div>
@@ -77,7 +90,8 @@ export default {
         return {
             isbnList: '8535236996\n9788543025001\n123456',
             format: '',
-            result: ''
+            result: '',
+            upload: false
         }
     },
     filters: {
@@ -88,7 +102,19 @@ export default {
     },
     methods: {
       getUrl: function (format) {
-        return '/api/get/' + this.isbnList.split('\n').join('/') + (format ? ('?format=' + format) : '')
+        let items = this.isbnList;
+        console.log(this.upload)
+        if (this.upload){
+          const reader = new FileReader()
+          const inputUpload = this.$refs.upload;
+          console.log(inputUpload)
+          reader.onload = function(fileLoadedEvent){
+            var textFromFileLoaded = inputUpload.target.result;
+            console.log(textFromFileLoaded)
+            items = textFromFileLoaded
+          };
+        }
+        return '/api/get/' + items.split('\n').join('/') + (format ? ('?format=' + format) : '')
       },
       getData: function (format=''){
         axios.get(this.getUrl(format)).then(r => {
