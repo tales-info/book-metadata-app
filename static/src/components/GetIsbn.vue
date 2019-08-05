@@ -30,7 +30,7 @@
               <h5>Itens</h5>
               <div class="list-group">
                 <div class="list-group-item"  v-for="(v, i) in result.result" v-bind:key="i">
-                  <h5 v-if="v.title">{{v.title}}</h5>
+                  <h5 v-if="v.title">[{{v.id}}] {{v.title}}</h5>
                   <h6 v-if="v.subtitle">{{v.subtitle}}</h6>
                   <div>
                     <code class="mr-2" v-if="v.isbn_10">ISBN 10: {{v.isbn_10}}</code>
@@ -38,7 +38,6 @@
                   </div>
                   <p v-if="v.authors.length > 0"><strong>{{v.authors|commaSeparated}}</strong></p>
                   <div>
-                    <span class="badge badge-pill badge-primary mr-2" v-if="v.id">Id (Busca Local){{v.id}}</span>
                     <span class="badge badge-pill badge-primary mr-2" v-if="v.language">Idioma: {{v.language}}</span>
                     <span class="badge badge-pill badge-primary mr-2" v-if="v.page_count">{{v.page_count}} páginas</span>
                     <span class="badge badge-pill badge-primary mr-2" v-if="v.publisher">Editora: {{v.publisher}}</span>
