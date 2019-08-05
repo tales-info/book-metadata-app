@@ -74,4 +74,11 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+code {
+  background: #efefef;
+  color: #3daaff !important;
+  border-radius: .3rem;
+  padding: 1px 2px;
+  display: inline-block;
+}
 </style>
